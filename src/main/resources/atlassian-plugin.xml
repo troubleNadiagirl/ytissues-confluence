@@ -1,0 +1,72 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}"
+                  plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="configure.url">/plugins/servlet/ytissues</param>
+    </plugin-info>
+
+    <!-- add our i18n resource -->
+    <resource type="i18n" name="i18n" location="ytissues" />
+    <resource type="download" name="images/" location="/images"/>
+
+    <!-- add our web resources -->
+    <web-resource key="cssResource" i18n-name-key="ru.kontur.ytissues.cssResource">
+        <resource type="download" name="ytissues.css" location="css/ytissues.css" />
+    </web-resource>
+    <web-item key="menu-item" section="system.admin/configuration"
+              weight="10" i18n-name-key="ru.kontur.ytissues.menu-itemLabel.name">
+        <description key="ru.kontur.ytissues.menu-itemLabel.description" />
+        <label key="ru.kontur.ytissues.adminlink" />
+        <link linkId="ru.kontur.ytissues.adminlink">/plugins/servlet/ytissues</link>
+    </web-item>
+    <web-resource key="editor-ytissues" i18n-name-key="ru.kontur.ytissues.editor-ytissues.openInYtAction">
+        <dependency>com.atlassian.confluence.tinymceplugin:editor-resources</dependency>
+        <resource type="download" name="ytissues.js" location="js/ytissues.js"/>
+        <dependency>confluence.web.resources:ajs</dependency>
+        <context>editor</context>
+    </web-resource>
+    <web-resource key="ytUrlAutoConvert" i18n-name-key="ru.kontur.ytissues.autoconvert.name">
+        <description key="ru.kontur.ytissues.autoconvert.description"/>
+        <resource type="download" name="autoconvert.js" location="js/autoconvert.js"/>
+        <dependency>com.atlassian.confluence.plugins.confluence-paste:autoconvert-core</dependency>
+        <dependency>confluence.web.resources:ajs</dependency>
+        <context>editor</context>
+    </web-resource>
+
+    <!-- publish our component -->
+    <servlet name="ytissuesSettingsUI" class="ru.kontur.InfoAndSettingsServlet"
+             key="ytissuesSettingsUI" i18n-name-key="ru.kontur.ytissues.settingsUIname">
+        <url-pattern>/ytissues</url-pattern>
+    </servlet>
+    <servlet name="ytissues-ytbase" class="ru.kontur.YtBaseGetterServlet"
+             key="ytissues-ytbase" i18n-name-key="ru.kontur.ytissues.ytissues-ytbase">
+        <url-pattern>/ytissues-ytbase</url-pattern>
+    </servlet>
+    <xhtml-macro key="single-yt-issue-macro" name="single-yt-issue-macro"
+                 class="ru.kontur.SingleYtMacro" i18n-name-key="ru.kontur.ytissues.single-yt-issue-macro"
+                 icon="/download/resources/${project.groupId}.${project.artifactId}/images/macroLogo.png">
+        <description key="ru.kontur.ytissues.single-yt-issue-macro.description" />
+        <category name="development" />
+        <category name="external-content" />
+        <parameters>
+            <parameter name="issueIdOrUrl" type="string" required="true">
+                <option key="showKeyInPlaceholder"   value="false" />
+                <option key="showValueInPlaceholder" value="true" />
+            </parameter>
+        </parameters>
+        <property-panel>
+            <button id="openinyt" label="ru.kontur.ytissues.open-in-yt" />
+        </property-panel>
+    </xhtml-macro>
+
+    <!-- import from the product container -->
+    <component-import key="loginUriProvider"      interface="com.atlassian.sal.api.auth.LoginUriProvider" />
+    <component-import key="templateRenderer"      interface="com.atlassian.templaterenderer.TemplateRenderer" />
+    <component-import key="userManager"           interface="com.atlassian.sal.api.user.UserManager" />
+    <component-import key="pluginSettingsFactory" interface="com.atlassian.sal.api.pluginsettings.PluginSettingsFactory" />
+    <component-import key="i18n"                  interface="com.atlassian.sal.api.message.I18nResolver" />
+</atlassian-plugin>

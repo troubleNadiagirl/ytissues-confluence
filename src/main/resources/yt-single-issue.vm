@@ -1,0 +1,5 @@
+<span class="ytissue $statusCssType">
+	<a href="$ref">$id</a>
+	<span class="ytsummary">$summary</span>
+	<span class="ytstatus">$status</span>
+</span>

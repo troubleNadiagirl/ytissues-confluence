@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>YT issues macros admin</title>
+    <meta name="decorator" content="atl.admin" />
+  </head>
+  <body>
+    <form id="admin" class="aui" method="POST">
+        <div class="field-group">
+             <label for="ytUrl">YT url:</label>
+             <input type="text" id="ytUrl" name="ytUrl" class="text" value="$ytUrl" />
+        </div>
+        <div class="field-group">
+             <label for="ytUsername">YT username:</label>
+             <input type="text" id="ytUsername" name="ytUsername" class="text" value="$ytUsername" />
+        </div>
+        <div class="field-group">
+             <label for="ytPassword">YT password:</label>
+             <input type="password" id="ytPassword" name="ytPassword" class="text" />
+        </div>
+        <div class="field-group">
+            <input type="submit" value="Save" class="button" />
+        </div>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,40 @@
+.ytissue {
+    background-color: #f0f0f0;
+    border: 1px solid #CFCFCF;
+    border-radius: 3px;
+    display: inline-block;
+    line-height: 14px;
+    padding: 1px 2px;
+    margin-bottom: 1px;
+    margin-left: 0px;
+    margin-right: 1px;
+    margin-top: 1px;
+}
+
+.ytissue > a { 
+    font-weight: bold;
+}
+
+.ytissue > .ytstatus {
+    font-weight: bold;
+}
+
+.ytissue.ytnotexists > .ytstatus {
+    color: red;
+}
+
+.ytissue.ytclosed > .ytstatus {
+    color: green;
+}
+
+.wiki-content .ytissue.ytclosed > a {
+    text-decoration: line-through;
+}
+
+.wiki-content .ytissue.ytclosed:hover > a {
+    text-decoration: underline;
+}
+
+.ytissue.ytopened > .ytstatus {
+    color: #868686;
+}
