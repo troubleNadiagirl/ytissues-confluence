@@ -47,10 +47,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.atlassian.templaterenderer</groupId>
-            <artifactId>atlassian-template-renderer-api</artifactId>
-            <version>1.2.4</version>
-            <type>jar</type>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -63,24 +62,17 @@
             <version>2.2</version>
         </dependency>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.2-atlassian-1</version>
         </dependency>
+
+        <!-- Provided dependencies -->
         <dependency>
             <groupId>com.atlassian.confluence</groupId>
             <artifactId>confluence</artifactId>
             <version>${confluence.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- WIRED TEST RUNNER DEPENDENCIES -->
-        <dependency>
-            <groupId>com.atlassian.plugins</groupId>
-            <artifactId>atlassian-plugins-osgi-testrunner</artifactId>
-            <version>${plugin.testrunner.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.ws.rs</groupId>
@@ -89,9 +81,24 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.code.gson</groupId>
-            <artifactId>gson</artifactId>
-            <version>2.2.2-atlassian-1</version>
+            <groupId>com.atlassian.templaterenderer</groupId>
+            <artifactId>atlassian-template-renderer-api</artifactId>
+            <version>1.2.4</version>
+            <type>jar</type>
+        </dependency>
+
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.atlassian.plugins</groupId>
+            <artifactId>atlassian-plugins-osgi-testrunner</artifactId>
+            <version>${plugin.testrunner.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>javax.validation</groupId>
@@ -104,6 +111,33 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.scala-tools</groupId>
+                <artifactId>maven-scala-plugin</artifactId>
+                <version>2.15.2</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>test-compile</id>
+                        <goals>
+                            <goal>testCompile</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
                 <artifactId>maven-confluence-plugin</artifactId>
                 <version>${amps.version}</version>
@@ -111,15 +145,6 @@
                 <configuration>
                     <productVersion>${confluence.version}</productVersion>
                     <productDataVersion>${confluence.data.version}</productDataVersion>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -130,5 +155,6 @@
         <confluence.data.version>5.6</confluence.data.version>
         <amps.version>5.0.4</amps.version>
         <plugin.testrunner.version>1.2.0</plugin.testrunner.version>
+        <scala.version>2.11.7</scala.version>
     </properties>
 </project>

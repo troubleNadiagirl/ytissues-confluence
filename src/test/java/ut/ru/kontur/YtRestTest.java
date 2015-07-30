@@ -18,7 +18,7 @@ import ru.kontur.YtRest;
  *
  * @author michael.plusnin
  */
-@Ignore // TODO(mp): рреализовать тест
+@Ignore // TODO(mp): make up
 public class YtRestTest {
     private YtRest ytRest;
 
