@@ -1,4 +1,4 @@
-package ut.ru.kontur;
+package ut.ru.kontur.ytclient;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableListMultimap;
@@ -11,7 +11,7 @@ import org.joda.time.DateTime;
 import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import ru.kontur.YtXmlIssue;
+import ru.kontur.ytclient.YtXmlIssue;
 
 /**
  *

@@ -1,4 +1,4 @@
-package ut.ru.kontur;
+package ut.ru.kontur.ytclient;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
@@ -7,7 +7,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import org.junit.Assert;
 import org.junit.Test;
-import ru.kontur.YtIssueXmlHandler;
+import ru.kontur.ytclient.YtIssueXmlHandler;
 
 /**
  *

@@ -1,4 +1,4 @@
-package ru.kontur;
+package ru.kontur.ytclient;
 
 /**
  *

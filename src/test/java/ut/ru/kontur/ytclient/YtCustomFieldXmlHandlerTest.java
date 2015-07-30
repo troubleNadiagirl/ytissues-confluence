@@ -1,4 +1,4 @@
-package ut.ru.kontur;
+package ut.ru.kontur.ytclient;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -9,7 +9,7 @@ import javax.xml.parsers.SAXParserFactory;
 import junit.framework.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import ru.kontur.YtCustomFieldXmlHandler;
+import ru.kontur.ytclient.YtCustomFieldXmlHandler;
 
 /**
  *

@@ -1,14 +1,11 @@
-package ut.ru.kontur;
+package ut.ru.kontur.ytclient;
 
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.ListMultimap;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +20,7 @@ import junit.framework.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.xml.sax.SAXException;
-import ru.kontur.YtListOfIssuesXmlHandler;
+import ru.kontur.ytclient.YtListOfIssuesXmlHandler;
 
 /**
  *

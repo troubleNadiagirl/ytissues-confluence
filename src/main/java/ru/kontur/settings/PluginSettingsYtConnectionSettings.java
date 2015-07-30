@@ -1,6 +1,7 @@
-package ru.kontur;
+package ru.kontur.settings;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
+import ru.kontur.IssueUrlComposer;
 
 /**
  *

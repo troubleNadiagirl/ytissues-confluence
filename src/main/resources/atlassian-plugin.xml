@@ -38,11 +38,11 @@
     </web-resource>
 
     <!-- publish our component -->
-    <servlet name="ytissuesSettingsUI" class="ru.kontur.InfoAndSettingsServlet"
+    <servlet name="ytissuesSettingsUI" class="ru.kontur.servlets.InfoAndSettingsServlet"
              key="ytissuesSettingsUI" i18n-name-key="ru.kontur.ytissues.settingsUIname">
         <url-pattern>/ytissues</url-pattern>
     </servlet>
-    <servlet name="ytissues-ytbase" class="ru.kontur.YtBaseGetterServlet"
+    <servlet name="ytissues-ytbase" class="ru.kontur.servlets.YtBaseGetterServlet"
              key="ytissues-ytbase" i18n-name-key="ru.kontur.ytissues.ytissues-ytbase">
         <url-pattern>/ytissues-ytbase</url-pattern>
     </servlet>

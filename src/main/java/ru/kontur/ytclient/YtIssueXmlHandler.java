@@ -1,4 +1,4 @@
-package ru.kontur;
+package ru.kontur.ytclient;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ListMultimap;

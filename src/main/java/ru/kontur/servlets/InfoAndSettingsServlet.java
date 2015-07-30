@@ -1,9 +1,15 @@
-package ru.kontur;
+package ru.kontur.servlets;
 
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.sal.api.user.UserManager;
+import ru.kontur.*;
+import ru.kontur.settings.PluginSettingsYtConnectionSettings;
+import ru.kontur.settings.YtConnectionSettingsStorageInterface;
+import ru.kontur.ytclient.http.CookiesStorageInterface;
+import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
+
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
@@ -23,7 +29,7 @@ public class InfoAndSettingsServlet extends HttpServlet {
     private LoginUriProvider loginUriProvider;
 
     private YtConnectionSettingsStorageInterface connSettings;
-    private CookiesStorageInterface              cookies;
+    private CookiesStorageInterface cookies;
 
     public InfoAndSettingsServlet(
         UserManager           userManager,

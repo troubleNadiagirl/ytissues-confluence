@@ -1,4 +1,4 @@
-package ut.ru.kontur;
+package ut.ru.kontur.ytclient;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -6,13 +6,13 @@ import java.util.List;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
-import ru.kontur.ConnectionException;
-import ru.kontur.ParseException;
-import ru.kontur.SimpleCookiesStorage;
-import ru.kontur.SimpleYtConnectionSettingsStorage;
-import ru.kontur.YtConnectionSettingsStorageInterface;
-import ru.kontur.YtIssue;
-import ru.kontur.YtRest;
+import ru.kontur.ytclient.http.ConnectionException;
+import ru.kontur.ytclient.ParseException;
+import ru.kontur.ytclient.http.SimpleCookiesStorage;
+import ru.kontur.settings.SimpleYtConnectionSettingsStorage;
+import ru.kontur.settings.YtConnectionSettingsStorageInterface;
+import ru.kontur.ytclient.YtIssue;
+import ru.kontur.ytclient.YtRest;
 
 /**
  *

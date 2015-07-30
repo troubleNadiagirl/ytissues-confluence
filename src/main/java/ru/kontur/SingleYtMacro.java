@@ -8,6 +8,14 @@ import com.atlassian.sal.api.message.I18nResolver;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.templaterenderer.TemplateRenderer;
+import ru.kontur.settings.PluginSettingsYtConnectionSettings;
+import ru.kontur.settings.YtConnectionSettingsStorageInterface;
+import ru.kontur.ytclient.http.CookiesStorageInterface;
+import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
+import ru.kontur.ytclient.YtInterface;
+import ru.kontur.ytclient.YtIssue;
+import ru.kontur.ytclient.YtRest;
+
 import java.io.StringWriter;
 import java.text.MessageFormat;
 import java.util.Map;

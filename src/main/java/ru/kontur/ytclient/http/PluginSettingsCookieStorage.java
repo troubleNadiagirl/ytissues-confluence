@@ -1,7 +1,8 @@
-package ru.kontur;
+package ru.kontur.ytclient.http;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.google.common.base.Joiner;
+
 import java.util.List;
 
 /**

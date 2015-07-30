@@ -1,4 +1,6 @@
-package ru.kontur;
+package ru.kontur.settings;
+
+import ru.kontur.IssueUrlComposer;
 
 /**
  * This class is thread safe, all instances has some values

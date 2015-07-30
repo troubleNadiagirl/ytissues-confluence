@@ -1,6 +1,5 @@
-package ru.kontur;
+package ru.kontur.ytclient;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ListMultimap;
 import java.io.BufferedInputStream;
 import java.io.Closeable;
@@ -14,14 +13,14 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import org.xml.sax.Attributes;
+
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
+import ru.kontur.settings.YtConnectionSettingsStorageInterface;
+import ru.kontur.ytclient.http.ConnectionException;
+import ru.kontur.ytclient.http.CookiesStorageInterface;
 
 /**
  *

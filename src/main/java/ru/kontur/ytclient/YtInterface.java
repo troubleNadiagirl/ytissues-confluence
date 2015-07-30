@@ -1,4 +1,6 @@
-package ru.kontur;
+package ru.kontur.ytclient;
+
+import ru.kontur.ytclient.http.ConnectionException;
 
 import java.util.List;
 

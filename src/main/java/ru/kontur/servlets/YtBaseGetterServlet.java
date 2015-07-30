@@ -1,4 +1,4 @@
-package ru.kontur;
+package ru.kontur.servlets;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import java.io.IOException;
@@ -13,6 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
+import ru.kontur.Constants;
+import ru.kontur.settings.PluginSettingsYtConnectionSettings;
+import ru.kontur.settings.YtConnectionSettingsStorageInterface;
 
 /**
  *

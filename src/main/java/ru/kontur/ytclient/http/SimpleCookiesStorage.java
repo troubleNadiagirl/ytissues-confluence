@@ -1,6 +1,8 @@
-package ru.kontur;
+package ru.kontur.ytclient.http;
 
 import com.google.common.base.Joiner;
+import ru.kontur.ytclient.http.CookiesStorageInterface;
+
 import java.util.List;
 
 /**
