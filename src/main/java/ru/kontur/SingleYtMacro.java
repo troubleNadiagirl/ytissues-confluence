@@ -15,6 +15,7 @@ import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
 import ru.kontur.ytclient.YtInterface;
 import ru.kontur.ytclient.YtIssue;
 import ru.kontur.ytclient.YtRest;
+import ru.kontur.ytissues.Constants;
 
 import java.io.StringWriter;
 import java.text.MessageFormat;
@@ -46,28 +47,27 @@ public class SingleYtMacro implements Macro {
         PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
         connSettings = new PluginSettingsYtConnectionSettings(
             pluginSettings,
-            Constants.PLUGIN_SETTINGS_BASE_KEY
+            Constants.PLUGIN_SETTINGS_BASE_KEY()
         );
         CookiesStorageInterface cookiesStorage = new PluginSettingsCookieStorage(
             pluginSettings,
-            Constants.PLUGIN_SETTINGS_BASE_KEY
+            Constants.PLUGIN_SETTINGS_BASE_KEY()
         );
         ytInterface = new YtRest(connSettings, cookiesStorage);
         this.i18n = i18n;
     }
 
-    @Override
     public String execute(
         Map<String, String> params,
         String defaultParam,
         ConversionContext cc
     ) throws MacroExecutionException {
-        webResourceManager.requireResource(Constants.PROJECT_BASE_KEY + ":cssResource");
+        webResourceManager.requireResource(Constants.PROJECT_BASE_KEY() + ":cssResource");
 
-        String issueIdOrUrl = params.get(Constants.ISSUE_ID_OR_URL_KEY);
+        String issueIdOrUrl = params.get(Constants.ISSUE_ID_OR_URL_KEY());
         if (issueIdOrUrl == null)
             throw new MacroExecutionException(
-                    i18n.getText(Constants.PROJECT_BASE_KEY + ".exceptionMessage.issueIdOrUrlNotDefined"));
+                    i18n.getText(Constants.PROJECT_BASE_KEY() + ".exceptionMessage.issueIdOrUrlNotDefined"));
 
         String issueIdRE = "^[A-Za-z0-9]+\\-\\d+$";
         if (issueIdOrUrl.matches(issueIdRE)) {
@@ -86,11 +86,11 @@ public class SingleYtMacro implements Macro {
             Matcher m = issueUrlPat.matcher(issueIdOrUrl);
             if (!m.matches())
                 throw new MacroExecutionException(MessageFormat.format(
-                        i18n.getText(Constants.PROJECT_BASE_KEY + ".exceptionMessage.notYtIssueUrl"), issueIdOrUrl));
+                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".exceptionMessage.notYtIssueUrl"), issueIdOrUrl));
             String issueId = m.group(5);
             if (issueId == null)
                 throw new MacroExecutionException(
-                        i18n.getText(Constants.PROJECT_BASE_KEY + ".exceptionMessage.issueNotFoundInUrl", issueIdOrUrl));
+                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".exceptionMessage.issueNotFoundInUrl", issueIdOrUrl));
             try {
                 return getIssueXhtmlElement(issueId);
             } catch(Exception e) {
@@ -110,12 +110,12 @@ public class SingleYtMacro implements Macro {
                 YtIssue issue = ytInterface.getIssue(issueId);
                 substitution.put("summary", issue.getSummary());
                 substitution.put("status", issue.getResolveTime() == null ?
-                        i18n.getText(Constants.PROJECT_BASE_KEY + ".openedStatus") :
-                        i18n.getText(Constants.PROJECT_BASE_KEY + ".closedStatus"));
+                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".openedStatus") :
+                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".closedStatus"));
                 substitution.put("statusCssType", issue.getResolveTime() == null ? "ytopened" : "ytclosed");
             } else {
                 substitution.put("summary", "");
-                substitution.put("status", i18n.getText(Constants.PROJECT_BASE_KEY + ".notExistsStatus"));
+                substitution.put("status", i18n.getText(Constants.PROJECT_BASE_KEY() + ".notExistsStatus"));
                 substitution.put("statusCssType", "ytnotexists");
             }
 
@@ -124,12 +124,10 @@ public class SingleYtMacro implements Macro {
             return sw.toString();
     }
 
-    @Override
     public BodyType getBodyType() {
         return BodyType.NONE;
     }
 
-    @Override
     public OutputType getOutputType() {
         return OutputType.INLINE;
     }

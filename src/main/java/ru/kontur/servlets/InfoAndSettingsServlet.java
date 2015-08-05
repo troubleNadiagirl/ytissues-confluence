@@ -9,6 +9,7 @@ import ru.kontur.settings.PluginSettingsYtConnectionSettings;
 import ru.kontur.settings.YtConnectionSettingsStorageInterface;
 import ru.kontur.ytclient.http.CookiesStorageInterface;
 import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
+import ru.kontur.ytissues.Constants;
 
 import java.io.IOException;
 import java.net.URI;
@@ -43,11 +44,11 @@ public class InfoAndSettingsServlet extends HttpServlet {
 
         this.connSettings = new PluginSettingsYtConnectionSettings(
             pluginSettingsFactory.createGlobalSettings(),
-            Constants.PLUGIN_SETTINGS_BASE_KEY
+            Constants.PLUGIN_SETTINGS_BASE_KEY()
         );
         this.cookies = new PluginSettingsCookieStorage(
             pluginSettingsFactory.createGlobalSettings(),
-            Constants.PROJECT_BASE_KEY
+            Constants.PROJECT_BASE_KEY()
         );
     }
 

@@ -14,7 +14,7 @@ public class PluginSettingsYtConnectionSettings
     private static final String PASSWORD_KEY = "ytpassword";
 
     private final String baseKey;
-    private PluginSettings pluginSettings;
+    private final PluginSettings pluginSettings;
 
     public PluginSettingsYtConnectionSettings(PluginSettings pluginSettings, String baseKey) {
         this.pluginSettings = pluginSettings;
@@ -38,33 +38,27 @@ public class PluginSettingsYtConnectionSettings
         }
     }
 
-    @Override
     public String getBaseUrl() {
         return get(URL_KEY);
     }
 
-    @Override
     public void setBaseUrl(String newUrl) {
         String nextUrl = IssueUrlComposer.removeLastSlashes(newUrl);
         set(URL_KEY, nextUrl);
     }
 
-    @Override
     public String getUsername() {
         return get(USERNAME_KEY);
     }
 
-    @Override
     public void setUsername(String newUsername) {
         set(USERNAME_KEY, newUsername);
     }
 
-    @Override
     public String getPassword() {
         return get(PASSWORD_KEY);
     }
 
-    @Override
     public void setPassword(String newPassword) {
         set(PASSWORD_KEY, newPassword);
     }

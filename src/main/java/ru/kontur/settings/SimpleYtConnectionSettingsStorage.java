@@ -18,7 +18,6 @@ public class SimpleYtConnectionSettingsStorage
     /**
      * Nothing slashes at the last positions of result
      */
-    @Override
     public String getBaseUrl() {
         synchronized (BASE_URL_SYNC) {
             return baseUrl;
@@ -28,7 +27,6 @@ public class SimpleYtConnectionSettingsStorage
     /**
      * This method erase last slashes
      */
-    @Override
     public void setBaseUrl(String newUrl) {
         String nextUrl = IssueUrlComposer.removeLastSlashes(newUrl);
         synchronized (BASE_URL_SYNC) {
@@ -36,28 +34,24 @@ public class SimpleYtConnectionSettingsStorage
         }
     }
 
-    @Override
     public String getUsername() {
         synchronized (USERNAME_SYNC) {
             return username;
         }
     }
 
-    @Override
     public void setUsername(String newUsername) {
         synchronized (USERNAME_SYNC) {
             username = newUsername;
         }
     }
 
-    @Override
     public String getPassword() {
         synchronized (PASSWORD_SYNC) {
             return password;
         }
     }
 
-    @Override
     public void setPassword(String newPassword) {
         synchronized (PASSWORD_SYNC) {
             password = newPassword;

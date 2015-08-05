@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import ru.kontur.Constants;
 import ru.kontur.settings.PluginSettingsYtConnectionSettings;
 import ru.kontur.settings.YtConnectionSettingsStorageInterface;
+import ru.kontur.ytissues.Constants;
 
 /**
  *
@@ -29,7 +29,7 @@ public class YtBaseGetterServlet extends HttpServlet {
     public YtBaseGetterServlet(PluginSettingsFactory pluginSettingsFactory) {
         this.connSettings = new PluginSettingsYtConnectionSettings(
             pluginSettingsFactory.createGlobalSettings(),
-            Constants.PROJECT_BASE_KEY
+            Constants.PROJECT_BASE_KEY()
         );
     }
 
