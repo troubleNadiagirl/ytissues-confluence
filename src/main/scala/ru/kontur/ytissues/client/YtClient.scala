@@ -1,5 +1,6 @@
 package ru.kontur.ytissues.client
 
+import ru.kontur.ytissues.Issue
 import ru.kontur.ytissues.client.impl.YtClientImpl
 import ru.kontur.ytissues.settings.YtSettings
 

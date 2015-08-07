@@ -10,17 +10,21 @@ import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.templaterenderer.TemplateRenderer;
 import ru.kontur.settings.PluginSettingsYtConnectionSettings;
 import ru.kontur.settings.YtConnectionSettingsStorageInterface;
-import ru.kontur.ytclient.http.CookiesStorageInterface;
-import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
-import ru.kontur.ytclient.YtInterface;
-import ru.kontur.ytclient.YtIssue;
-import ru.kontur.ytclient.YtRest;
 import ru.kontur.ytissues.Constants;
+import ru.kontur.ytissues.Issue;
+import ru.kontur.ytissues.client.YtClient;
+import ru.kontur.ytissues.client.impl.YtClientImpl;
+import ru.kontur.ytissues.settings.ConfluenceSettingsStorage;
+import scala.Option;
+import scala.concurrent.Await;
+import scala.concurrent.ExecutionContext$;
+import scala.concurrent.duration.Duration;
 
 import java.io.StringWriter;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class SingleYtMacro implements Macro {
     private TemplateRenderer templateRenderer;
-    private YtInterface ytInterface;
+    private YtClient ytClient;
     private YtConnectionSettingsStorageInterface connSettings;
     private I18nResolver i18n;
     private WebResourceManager webResourceManager;
@@ -49,11 +53,10 @@ public class SingleYtMacro implements Macro {
             pluginSettings,
             Constants.PLUGIN_SETTINGS_BASE_KEY()
         );
-        CookiesStorageInterface cookiesStorage = new PluginSettingsCookieStorage(
-            pluginSettings,
-            Constants.PLUGIN_SETTINGS_BASE_KEY()
-        );
-        ytInterface = new YtRest(connSettings, cookiesStorage);
+
+        ytClient = new YtClientImpl(
+                new ConfluenceSettingsStorage(pluginSettings).ytSettings().get(),
+                ExecutionContext$.MODULE$.global());
         this.i18n = i18n;
     }
 
@@ -100,28 +103,30 @@ public class SingleYtMacro implements Macro {
     }
 
     private String getIssueXhtmlElement(String issueId) throws Exception {
-            Map<String, Object> substitution = new TreeMap<String, Object>();
-            substitution.put("id", issueId.toUpperCase());
-            IssueUrlComposer urlComposer = new IssueUrlComposer(connSettings.getBaseUrl());
-            substitution.put("ref", urlComposer.compose(issueId));
+        Map<String, Object> substitution = new TreeMap<String, Object>();
+        substitution.put("id", issueId.toUpperCase());
+        
+        IssueUrlComposer urlComposer = new IssueUrlComposer(connSettings.getBaseUrl());
+        substitution.put("ref", urlComposer.compose(issueId));
 
-            boolean isIssueExists = ytInterface.checkTheIssueExists(issueId);
-            if (isIssueExists) {
-                YtIssue issue = ytInterface.getIssue(issueId);
-                substitution.put("summary", issue.getSummary());
-                substitution.put("status", issue.getResolveTime() == null ?
-                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".openedStatus") :
-                        i18n.getText(Constants.PROJECT_BASE_KEY() + ".closedStatus"));
-                substitution.put("statusCssType", issue.getResolveTime() == null ? "ytopened" : "ytclosed");
-            } else {
-                substitution.put("summary", "");
-                substitution.put("status", i18n.getText(Constants.PROJECT_BASE_KEY() + ".notExistsStatus"));
-                substitution.put("statusCssType", "ytnotexists");
-            }
+        Option<Issue> issueOpt = Await.result(ytClient.getIssue(issueId), Duration.apply(1, TimeUnit.SECONDS));
 
-            StringWriter sw = new StringWriter();
-            templateRenderer.render("yt-single-issue.vm", substitution, sw);
-            return sw.toString();
+        if (issueOpt.isDefined()) {
+            Issue issue = issueOpt.get();
+            substitution.put("summary", issue.summary());
+            substitution.put("status", issue.state().isOpened() ?
+                    i18n.getText(Constants.PROJECT_BASE_KEY() + ".openedStatus") :
+                    i18n.getText(Constants.PROJECT_BASE_KEY() + ".closedStatus"));
+            substitution.put("statusCssType", issue.state().isOpened() ? "ytopened" : "ytclosed");
+        } else {
+            substitution.put("summary", "");
+            substitution.put("status", i18n.getText(Constants.PROJECT_BASE_KEY() + ".notExistsStatus"));
+            substitution.put("statusCssType", "ytnotexists");
+        }
+
+        StringWriter sw = new StringWriter();
+        templateRenderer.render("yt-single-issue.vm", substitution, sw);
+        return sw.toString();
     }
 
     public BodyType getBodyType() {

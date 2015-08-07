@@ -2,23 +2,20 @@ package ru.kontur.servlets;
 
 import com.atlassian.sal.api.auth.LoginUriProvider;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
-import com.atlassian.templaterenderer.TemplateRenderer;
 import com.atlassian.sal.api.user.UserManager;
-import ru.kontur.*;
+import com.atlassian.templaterenderer.TemplateRenderer;
 import ru.kontur.settings.PluginSettingsYtConnectionSettings;
 import ru.kontur.settings.YtConnectionSettingsStorageInterface;
-import ru.kontur.ytclient.http.CookiesStorageInterface;
-import ru.kontur.ytclient.http.PluginSettingsCookieStorage;
 import ru.kontur.ytissues.Constants;
 
-import java.io.IOException;
-import java.net.URI;
-import java.util.Map;
-import java.util.TreeMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.URI;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  *
@@ -30,7 +27,6 @@ public class InfoAndSettingsServlet extends HttpServlet {
     private LoginUriProvider loginUriProvider;
 
     private YtConnectionSettingsStorageInterface connSettings;
-    private CookiesStorageInterface cookies;
 
     public InfoAndSettingsServlet(
         UserManager           userManager,
@@ -45,10 +41,6 @@ public class InfoAndSettingsServlet extends HttpServlet {
         this.connSettings = new PluginSettingsYtConnectionSettings(
             pluginSettingsFactory.createGlobalSettings(),
             Constants.PLUGIN_SETTINGS_BASE_KEY()
-        );
-        this.cookies = new PluginSettingsCookieStorage(
-            pluginSettingsFactory.createGlobalSettings(),
-            Constants.PROJECT_BASE_KEY()
         );
     }
 
@@ -83,20 +75,17 @@ public class InfoAndSettingsServlet extends HttpServlet {
         String ytUrl = request.getParameter("ytUrl");
         String storedYtUrl = connSettings.getBaseUrl();
         if (ytUrl != null && !ytUrl.isEmpty() && !ytUrl.equals(storedYtUrl)) {
-            cookies.erase();
             connSettings.setPassword(null);
             connSettings.setBaseUrl(ytUrl);
         }
 
         String ytUsername = request.getParameter("ytUsername");
         if (ytUsername != null && !ytUsername.isEmpty()) {
-            cookies.erase();
             connSettings.setUsername(ytUsername);
         }
 
         String ytPassword = request.getParameter("ytPassword");
         if (ytPassword != null && !ytPassword.isEmpty()) {
-            cookies.erase();
             connSettings.setPassword(ytPassword);
         }
 

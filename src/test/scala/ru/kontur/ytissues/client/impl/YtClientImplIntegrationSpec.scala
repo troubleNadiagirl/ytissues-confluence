@@ -3,8 +3,8 @@ package ru.kontur.ytissues.client.impl
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.SpanSugar._
-import ru.kontur.ytissues.client._
 import ru.kontur.ytissues.settings.YtSettings
+import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 

@@ -1,7 +1,9 @@
 package ru.kontur.ytissues.client.impl
 
+import com.ning.http.client.AsyncHttpClient
 import dispatch._
 import org.json4s.JsonAST.JValue
+import ru.kontur.ytissues.{Resolved, Opened, Issue}
 import ru.kontur.ytissues.client._
 import ru.kontur.ytissues.settings.YtSettings
 
@@ -14,7 +16,7 @@ import scala.util.{Try, Failure, Success}
  */
 class YtClientImpl(settings: YtSettings)(implicit ec: ExecutionContext) extends YtClient {
   val base = url(settings.url)
-  val http = Http
+  val http = Http(new AsyncHttpClient())
 
   override def getIssue(id: String): Future[Option[Issue]] = {
     val request = (base / "rest" / "issue" / id)

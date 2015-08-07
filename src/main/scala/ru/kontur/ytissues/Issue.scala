@@ -1,4 +1,4 @@
-package ru.kontur.ytissues.client
+package ru.kontur.ytissues
 
 /**
  * @author Michael Plusnin <michael.plusnin@gmail.com>
@@ -8,7 +8,12 @@ package ru.kontur.ytissues.client
 /**
  * State of issue which can have two values `Opened` and `Resolved`
  */
-sealed trait State
+sealed trait State {
+  def isOpened = this match {
+    case Opened => true
+    case Resolved => false
+  }
+}
 case object Opened extends State
 case object Resolved extends State
 
