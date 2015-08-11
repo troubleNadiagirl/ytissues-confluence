@@ -55,7 +55,7 @@ public class SingleYtMacro implements Macro {
         );
 
         ytClient = new YtClientImpl(
-                new ConfluenceSettingsStorage(pluginSettings).ytSettings().get(),
+                new ConfluenceSettingsStorage(pluginSettings).ytSettings().get().toYtClientSettings(),
                 ExecutionContext$.MODULE$.global());
         this.i18n = i18n;
     }

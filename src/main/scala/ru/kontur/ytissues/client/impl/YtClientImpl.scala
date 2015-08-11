@@ -3,20 +3,21 @@ package ru.kontur.ytissues.client.impl
 import com.ning.http.client.AsyncHttpClient
 import dispatch._
 import org.json4s.JsonAST.JValue
-import ru.kontur.ytissues.{Resolved, Opened, Issue}
 import ru.kontur.ytissues.client._
-import ru.kontur.ytissues.settings.YtSettings
+import ru.kontur.ytissues.settings.YtClientSettings
+import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
 import scala.concurrent.{ExecutionContext, Future, Promise}
-import scala.util.{Try, Failure, Success}
+import scala.util.{Failure, Success, Try}
 
 /**
  * @author Michael Plusnin <michael.plusnin@gmail.com>
  * @since 04.08.2015
  */
-class YtClientImpl(settings: YtSettings)(implicit ec: ExecutionContext) extends YtClient {
-  val base = url(settings.url)
-  val http = Http(new AsyncHttpClient())
+class YtClientImpl(private val settings: YtClientSettings)
+                  (implicit ec: ExecutionContext) extends YtClient {
+  private val base = url(settings.url)
+  private val http = Http(new AsyncHttpClient()) // TODO timeout
 
   override def getIssue(id: String): Future[Option[Issue]] = {
     val request = (base / "rest" / "issue" / id)
