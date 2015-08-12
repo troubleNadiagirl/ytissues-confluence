@@ -55,7 +55,7 @@ class YtClientProxy(private val settings: YtProxySettings,
     lastOvercountAttempt match {
       case None => true
       case Some(last) =>
-        new Duration(last, DateTime.now()).getMillis.millis > settings.unavailabilityDuration
+        new Duration(last, DateTime.now()).getMillis.millis > settings.unavailableDuration
     }
   }
 }

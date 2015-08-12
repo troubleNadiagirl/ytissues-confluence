@@ -18,26 +18,26 @@ import scala.util.Try
  * @param password users password
  * @param attempts attempts before YouTrack assumes unavailable
  * @param attemptTimeout timeout to GET-request attempt
- * @param unavailabilityDuration duration when YouTrack marked as unavailable
+ * @param unavailableDuration duration when YouTrack marked as unavailable
  */
 case class YtSettings(url: String,
                       user: String,
                       password: String,
                       attempts: Int,
                       attemptTimeout: Duration,
-                      unavailabilityDuration: Duration) {
+                      unavailableDuration: Duration) {
   override def toString = "YtSettings(" +
     s"url = $url, user = $user, password = ****, attempts = $attempts, " +
-    s"attemptTimeout = $attemptTimeout, unavailabilityDuration = $unavailabilityDuration)"
+    s"attemptTimeout = $attemptTimeout, unavailableDuration = $unavailableDuration)"
 
   def toYtProxySettings: YtProxySettings =
-    YtProxySettings(attempts, unavailabilityDuration)
+    YtProxySettings(attempts, unavailableDuration)
 
   def toYtClientSettings: YtClientSettings =
     YtClientSettings(url, user, password, attemptTimeout)
 }
 
-case class YtProxySettings(attempts: Int, unavailabilityDuration: Duration)
+case class YtProxySettings(attempts: Int, unavailableDuration: Duration)
 
 case class YtClientSettings(url: String, user: String, password: String, timeout: Duration) {
   override def toString: String =
@@ -54,9 +54,9 @@ class ConfluenceSettingsStorage(pluginSettings: PluginSettings) extends Settings
   private val URL_KEY: String = "yturl"
   private val USER_KEY: String = "ytusername"
   private val PASSWORD_KEY: String = "ytpassword"
-  private val ATTEMPTS_TIMEOUT_KEY: String = "attempts-timeout"
+  private val ATTEMPT_TIMEOUT_KEY: String = "attempt-timeout"
   private val ATTEMPTS_KEY = "attempts"
-  private val UNAVAILABILITY_DURATION_KEY = "unavailability-duration"
+  private val UNAVAILABLE_DURATION_KEY = "unavailable-duration"
 
   override def ytSettings: Option[YtSettings] =
     for {
@@ -67,10 +67,10 @@ class ConfluenceSettingsStorage(pluginSettings: PluginSettings) extends Settings
       attemptsRaw <- get(ATTEMPTS_KEY)
       attempts <- Try { attemptsRaw.toInt }.toOption
 
-      attemptsTimeoutRaw <- get(ATTEMPTS_TIMEOUT_KEY)
+      attemptsTimeoutRaw <- get(ATTEMPT_TIMEOUT_KEY)
       attemptsTimeout <- Try { Duration(attemptsTimeoutRaw) }.toOption
 
-      unavailabilityDurationRaw <- get(UNAVAILABILITY_DURATION_KEY)
+      unavailabilityDurationRaw <- get(UNAVAILABLE_DURATION_KEY)
       unavailabilityDuration <- Try { Duration(unavailabilityDurationRaw) }.toOption
     } yield YtSettings(url, user, password, attempts, attemptsTimeout, unavailabilityDuration)
 
@@ -80,8 +80,8 @@ class ConfluenceSettingsStorage(pluginSettings: PluginSettings) extends Settings
     put(PASSWORD_KEY, settings.password)
 
     put(ATTEMPTS_KEY, settings.attempts.toString)
-    put(ATTEMPTS_TIMEOUT_KEY, settings.attemptTimeout.toString)
-    put(UNAVAILABILITY_DURATION_KEY, settings.unavailabilityDuration.toString)
+    put(ATTEMPT_TIMEOUT_KEY, settings.attemptTimeout.toString)
+    put(UNAVAILABLE_DURATION_KEY, settings.unavailableDuration.toString)
   }
 
   private def get(key: String) =

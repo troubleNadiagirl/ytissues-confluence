@@ -1,4 +1,4 @@
-package ru.kontur.servlets;
+package ru.kontur.ytissues.servlets;
 
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import java.io.IOException;
@@ -13,9 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
-import ru.kontur.settings.PluginSettingsYtConnectionSettings;
-import ru.kontur.settings.YtConnectionSettingsStorageInterface;
-import ru.kontur.ytissues.Constants;
+import ru.kontur.ytissues.settings.ConfluenceSettingsStorage;
+import ru.kontur.ytissues.settings.SettingsStorage;
 
 /**
  *
@@ -24,29 +23,24 @@ import ru.kontur.ytissues.Constants;
 public class YtBaseGetterServlet extends HttpServlet {
     private static Logger logger = Logger.getLogger(YtBaseGetterServlet.class);
 
-    private YtConnectionSettingsStorageInterface connSettings;
+    private SettingsStorage settingsStorage;
 
     public YtBaseGetterServlet(PluginSettingsFactory pluginSettingsFactory) {
-        this.connSettings = new PluginSettingsYtConnectionSettings(
-            pluginSettingsFactory.createGlobalSettings(),
-            Constants.PROJECT_BASE_KEY()
+        this.settingsStorage = new ConfluenceSettingsStorage(
+            pluginSettingsFactory.createGlobalSettings()
         );
     }
 
     /**
      * Writes to response output stream JSON with
      * { host, port, path, protocol } fields, that getted from YT server url
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         URI ytBaseUrl;
         try {
-            ytBaseUrl = new URI(connSettings.getBaseUrl());
+            ytBaseUrl = new URI(settingsStorage.ytSettings().get().url()); // TODO: get could failed
         } catch (URISyntaxException ex) {
             logger.error("Not found yt base url in settings", ex);
             response.getWriter().print("{}");

@@ -1,4 +1,4 @@
-package ru.kontur;
+package ru.kontur.ytissues;
 
 /**
  *
@@ -20,7 +20,6 @@ public class IssueUrlComposer {
         for (int i = 0; i < input.length(); i++)
             if (input.charAt(i) != '/')
                 lastNonSlashPosition = i;
-        String result = new String(input.substring(0, lastNonSlashPosition + 1));
-        return result;
+        return input.substring(0, lastNonSlashPosition + 1);
     }
 }

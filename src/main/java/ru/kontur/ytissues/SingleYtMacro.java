@@ -1,4 +1,4 @@
-package ru.kontur;
+package ru.kontur.ytissues;
 
 import com.atlassian.confluence.content.render.xhtml.ConversionContext;
 import com.atlassian.confluence.macro.Macro;
@@ -8,13 +8,12 @@ import com.atlassian.sal.api.message.I18nResolver;
 import com.atlassian.sal.api.pluginsettings.PluginSettings;
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory;
 import com.atlassian.templaterenderer.TemplateRenderer;
-import ru.kontur.settings.PluginSettingsYtConnectionSettings;
-import ru.kontur.settings.YtConnectionSettingsStorageInterface;
-import ru.kontur.ytissues.Constants;
-import ru.kontur.ytissues.Issue;
+import ru.kontur.ytissues.client.impl.YtClientProxy;
 import ru.kontur.ytissues.client.YtClient;
 import ru.kontur.ytissues.client.impl.YtClientImpl;
+import ru.kontur.ytissues.servlets.InfoAndSettingsServlet;
 import ru.kontur.ytissues.settings.ConfluenceSettingsStorage;
+import ru.kontur.ytissues.settings.YtSettings;
 import scala.Option;
 import scala.concurrent.Await;
 import scala.concurrent.ExecutionContext$;
@@ -35,7 +34,7 @@ import java.util.regex.Pattern;
 public class SingleYtMacro implements Macro {
     private TemplateRenderer templateRenderer;
     private YtClient ytClient;
-    private YtConnectionSettingsStorageInterface connSettings;
+    private YtSettings settings;
     private I18nResolver i18n;
     private WebResourceManager webResourceManager;
 
@@ -49,14 +48,15 @@ public class SingleYtMacro implements Macro {
         this.webResourceManager = webResourceManager;
 
         PluginSettings pluginSettings = pluginSettingsFactory.createGlobalSettings();
-        connSettings = new PluginSettingsYtConnectionSettings(
-            pluginSettings,
-            Constants.PLUGIN_SETTINGS_BASE_KEY()
-        );
 
-        ytClient = new YtClientImpl(
-                new ConfluenceSettingsStorage(pluginSettings).ytSettings().get().toYtClientSettings(),
+        settings = new ConfluenceSettingsStorage(pluginSettings).ytSettings().get();
+
+        YtClient client = new YtClientImpl(
+                settings.toYtClientSettings(),
                 ExecutionContext$.MODULE$.global());
+
+        ytClient = new YtClientProxy(settings.toYtProxySettings(),
+                client, ExecutionContext$.MODULE$.global());
         this.i18n = i18n;
     }
 
@@ -105,8 +105,8 @@ public class SingleYtMacro implements Macro {
     private String getIssueXhtmlElement(String issueId) throws Exception {
         Map<String, Object> substitution = new TreeMap<String, Object>();
         substitution.put("id", issueId.toUpperCase());
-        
-        IssueUrlComposer urlComposer = new IssueUrlComposer(connSettings.getBaseUrl());
+
+        IssueUrlComposer urlComposer = new IssueUrlComposer(settings.url());
         substitution.put("ref", urlComposer.compose(issueId));
 
         Option<Issue> issueOpt = Await.result(ytClient.getIssue(issueId), Duration.apply(1, TimeUnit.SECONDS));

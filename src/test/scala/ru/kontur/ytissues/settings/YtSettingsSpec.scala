@@ -11,7 +11,7 @@ import scala.concurrent.duration._
 class YtSettingsSpec extends WordSpec with Matchers {
   "A settings" when {
     val settings = YtSettings("example", "theUserName", "thePassword",
-      attemptTimeout = 2.milliseconds, attempts = 5, unavailabilityDuration = 30.seconds)
+      attemptTimeout = 2.milliseconds, attempts = 5, unavailableDuration = 30.seconds)
 
     "call toString" should {
       "not contains password" in {
@@ -21,7 +21,7 @@ class YtSettingsSpec extends WordSpec with Matchers {
       "have example format" in {
         settings.toString shouldBe "YtSettings(" +
           "url = example, user = theUserName, password = ****, " +
-          "attempts = 5, attemptTimeout = 2 milliseconds, unavailabilityDuration = 30 seconds)"
+          "attempts = 5, attemptTimeout = 2 milliseconds, unavailableDuration = 30 seconds)"
       }
     }
 
@@ -35,7 +35,7 @@ class YtSettingsSpec extends WordSpec with Matchers {
     "call toYtProxySettings" should {
       "return YtProxySettings" in {
         settings.toYtProxySettings shouldBe YtProxySettings(
-          attempts = 5, unavailabilityDuration = 30.seconds)
+          attempts = 5, unavailableDuration = 30.seconds)
       }
     }
   }

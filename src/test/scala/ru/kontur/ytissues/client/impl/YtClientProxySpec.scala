@@ -18,7 +18,7 @@ import scala.concurrent.{Await, Future}
 class YtClientProxySpec extends WordSpec with Matchers with Futures {
   "A YtClientProxy" when {
     val settings = YtProxySettings(
-      attempts = 2, unavailabilityDuration = 3.seconds)
+      attempts = 2, unavailableDuration = 3.seconds)
     class UnavailableProxy {
       val proxy = new YtClientProxy(settings, new YtClient {
         override def getIssue(id: String) = {
