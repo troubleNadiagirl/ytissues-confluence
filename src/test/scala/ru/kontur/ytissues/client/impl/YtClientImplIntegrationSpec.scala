@@ -3,9 +3,11 @@ package ru.kontur.ytissues.client.impl
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.SpanSugar._
+import ru.kontur.ytissues.exceptions.TimeoutException
 import ru.kontur.ytissues.settings.YtClientSettings
 import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
+import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 
 /**
@@ -16,7 +18,7 @@ class YtClientImplIntegrationSpec extends WordSpec with Matchers with ScalaFutur
   implicit val defaultPatience = PatienceConfig(timeout = 1.seconds, interval = 5.millis)
 
   "A YouTrack client" when {
-    val connectionSettings = new YtClientSettings("http://192.168.99.100:32768", "root", "123", 1.second)
+    val connectionSettings = YtClientSettings("http://192.168.99.100:32768", "root", "123", 1.second)
     val youTrack = new YtClientImpl(connectionSettings)
 
     "non contains issue" should {
@@ -39,13 +41,20 @@ class YtClientImplIntegrationSpec extends WordSpec with Matchers with ScalaFutur
       }
     }
 
-    // TODO timeout
+    "response won't came in timeout" should {
+      val slowSettings = YtClientSettings("http://yt-test", "root", "123", 1.second)
+      val slowYouTrack = new YtClientImpl(slowSettings)
+      "return TimeoutException" in {
+        Await.result(slowYouTrack.getIssue("USELESS-1").failed, 10.seconds) shouldBe
+          a [TimeoutException]
+      }
+    }
 
     "server not found" should {
-      val unknownSettings = new YtClientSettings("http://unavailable:123", "1", "1", 1.second)
+      val unknownSettings = YtClientSettings("http://unavailable:123", "1", "1", 1.second)
       val unavailableYouTrack = new YtClientImpl(unknownSettings)
       "return failure" in {
-        whenReady(unavailableYouTrack.getIssue("USELESS-1").failed) { _ shouldBe a [Exception] }
+        whenReady(unavailableYouTrack.getIssue("USELESS-1").failed) { _ shouldBe an [Exception] }
       }
     }
   }

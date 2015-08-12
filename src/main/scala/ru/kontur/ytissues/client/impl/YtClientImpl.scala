@@ -1,9 +1,10 @@
 package ru.kontur.ytissues.client.impl
 
-import com.ning.http.client.AsyncHttpClient
+import com.ning.http.client.{AsyncHttpClientConfig, AsyncHttpClient}
 import dispatch._
 import org.json4s.JsonAST.JValue
 import ru.kontur.ytissues.client._
+import ru.kontur.ytissues.exceptions.TimeoutException
 import ru.kontur.ytissues.settings.YtClientSettings
 import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
@@ -17,7 +18,15 @@ import scala.util.{Failure, Success, Try}
 class YtClientImpl(private val settings: YtClientSettings)
                   (implicit ec: ExecutionContext) extends YtClient {
   private val base = url(settings.url)
-  private val http = Http(new AsyncHttpClient()) // TODO timeout
+  private val http = CreateDispatch()
+
+  private def CreateDispatch(): Http = {
+    val config = new AsyncHttpClientConfig.Builder()
+      .setRequestTimeout(settings.timeout.toMillis.toInt)
+      .build()
+
+    Http(new AsyncHttpClient(config))
+  }
 
   override def getIssue(id: String): Future[Option[Issue]] = {
     val request = (base / "rest" / "issue" / id)
@@ -28,9 +37,10 @@ class YtClientImpl(private val settings: YtClientSettings)
 
     val p = Promise[Option[Issue]]()
 
-    x onComplete {
+    x map { t => System.out.println(t); t } onComplete {
       case Success(Right(json)) => p.complete(parse(json))
       case Success(Left(StatusCode(404))) => p.success(None)
+      case Success(Left(e : java.util.concurrent.TimeoutException)) => p.failure(TimeoutException(e))
       case Success(Left(t)) => p.failure(t)
       case Failure(t) => p.failure(t)
     }

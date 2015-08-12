@@ -1,4 +1,4 @@
-package ru.kontur.ytissues
+package ru.kontur.ytissues.exceptions
 
 /**
  * @author Michael Plusnin <michael.plusnin@gmail.com>
