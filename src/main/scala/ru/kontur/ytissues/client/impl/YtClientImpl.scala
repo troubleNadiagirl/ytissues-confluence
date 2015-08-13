@@ -4,7 +4,7 @@ import com.ning.http.client.{AsyncHttpClientConfig, AsyncHttpClient}
 import dispatch._
 import org.json4s.JsonAST.JValue
 import ru.kontur.ytissues.client._
-import ru.kontur.ytissues.exceptions.TimeoutException
+import ru.kontur.ytissues.exceptions.ConnectionException
 import ru.kontur.ytissues.settings.YtClientSettings
 import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
@@ -37,10 +37,11 @@ class YtClientImpl(private val settings: YtClientSettings)
 
     val p = Promise[Option[Issue]]()
 
-    x map { t => System.out.println(t); t } onComplete {
+    x onComplete {
       case Success(Right(json)) => p.complete(parse(json))
       case Success(Left(StatusCode(404))) => p.success(None)
-      case Success(Left(e : java.util.concurrent.TimeoutException)) => p.failure(TimeoutException(e))
+      case Success(Left(e: java.util.concurrent.TimeoutException)) => p.failure(ConnectionException(e))
+      case Success(Left(e: java.net.ConnectException)) => p.failure(ConnectionException(e))
       case Success(Left(t)) => p.failure(t)
       case Failure(t) => p.failure(t)
     }

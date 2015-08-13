@@ -3,7 +3,7 @@ package ru.kontur.ytissues.client.impl
 import org.scalatest._
 import org.scalatest.concurrent.ScalaFutures
 import org.scalatest.time.SpanSugar._
-import ru.kontur.ytissues.exceptions.TimeoutException
+import ru.kontur.ytissues.exceptions.ConnectionException
 import ru.kontur.ytissues.settings.YtClientSettings
 import ru.kontur.ytissues.{Issue, Opened, Resolved}
 
@@ -46,7 +46,7 @@ class YtClientImplIntegrationSpec extends WordSpec with Matchers with ScalaFutur
       val slowYouTrack = new YtClientImpl(slowSettings)
       "return TimeoutException" in {
         Await.result(slowYouTrack.getIssue("USELESS-1").failed, 10.seconds) shouldBe
-          a [TimeoutException]
+          a [ConnectionException]
       }
     }
 

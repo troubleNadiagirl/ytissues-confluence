@@ -3,7 +3,7 @@ package ru.kontur.ytissues.client.impl
 import org.scalatest.concurrent.Futures
 import org.scalatest.{Matchers, WordSpec}
 import ru.kontur.ytissues.client.YtClient
-import ru.kontur.ytissues.exceptions.TimeoutException
+import ru.kontur.ytissues.exceptions.ConnectionException
 import ru.kontur.ytissues.settings.YtProxySettings
 import ru.kontur.ytissues.{Opened, Issue}
 
@@ -23,7 +23,7 @@ class YtClientProxySpec extends WordSpec with Matchers with Futures {
       val proxy = new YtClientProxy(settings, new YtClient {
         override def getIssue(id: String) = {
           Thread.sleep(500)
-          Future.failed(TimeoutException(new Exception()))}})
+          Future.failed(ConnectionException(new Exception()))}})
 
       def makeRequest(): Future[Option[Issue]] = proxy.getIssue("USELESS-1")
     }

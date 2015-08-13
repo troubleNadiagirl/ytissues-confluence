@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import ru.kontur.ytissues.settings.ConfluenceSettingsStorage;
 import ru.kontur.ytissues.settings.SettingsStorage;
+import ru.kontur.ytissues.settings.YtSettings;
+import scala.Option;
 
 /**
  *
@@ -38,15 +40,20 @@ public class YtBaseGetterServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        URI ytBaseUrl;
+        URI ytBaseUrl = null;
         try {
-            ytBaseUrl = new URI(settingsStorage.ytSettings().get().url()); // TODO: get could failed
-        } catch (URISyntaxException ex) {
-            logger.error("Not found yt base url in settings", ex);
+            Option<YtSettings> settings = settingsStorage.ytSettings();
+            if (settings.isDefined())
+                ytBaseUrl = new URI(settings.get().url());
+        } catch (URISyntaxException ex) { ytBaseUrl = null; }
+
+        if (ytBaseUrl == null) {
+            logger.warn("Not found yt base url in settings");
             response.getWriter().print("{}");
             response.getWriter().flush();
             return;
         }
+
         Map<String, String> responseParameters = new TreeMap<String, String>();
         responseParameters.put("host", ytBaseUrl.getHost());
         int port = ytBaseUrl.getPort();

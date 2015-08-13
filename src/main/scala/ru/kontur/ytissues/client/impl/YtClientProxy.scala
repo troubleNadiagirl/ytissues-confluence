@@ -2,7 +2,7 @@ package ru.kontur.ytissues.client.impl
 
 import org.joda.time.{DateTime, Duration}
 import ru.kontur.ytissues.client.YtClient
-import ru.kontur.ytissues.exceptions.{TimeoutException, ServiceUnavailableException}
+import ru.kontur.ytissues.exceptions.{ConnectionException, ServiceUnavailableException}
 import ru.kontur.ytissues.settings.YtProxySettings
 import ru.kontur.ytissues.Issue
 
@@ -32,7 +32,7 @@ class YtClientProxy(private val settings: YtProxySettings,
     val p = Promise[Option[Issue]]()
     proxied.getIssue(id) onComplete {
       case Success(x) => p.success(x)
-      case Failure(x : TimeoutException) => p.failure(x); failAttempt()
+      case Failure(x : ConnectionException) => p.failure(x); failAttempt()
       case Failure(x) => p.failure(x)
     }
 
