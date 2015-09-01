@@ -5,7 +5,7 @@ package ru.kontur.ytissues;
  * @author michael.plusnin
  */
 public class IssueUrlComposer {
-    private String ytBaseUrl;
+    private final String ytBaseUrl;
 
     public IssueUrlComposer(String ytBaseUrl) {
         this.ytBaseUrl = removeLastSlashes(ytBaseUrl);

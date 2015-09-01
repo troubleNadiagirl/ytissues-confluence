@@ -9,10 +9,10 @@ import java.util.regex.{Matcher, Pattern}
 import com.atlassian.confluence.`macro`.Macro.{BodyType, OutputType}
 import com.atlassian.confluence.`macro`.{Macro, MacroExecutionException}
 import com.atlassian.confluence.content.render.xhtml.ConversionContext
-import com.atlassian.plugin.webresource.WebResourceManager
 import com.atlassian.sal.api.message.I18nResolver
 import com.atlassian.sal.api.pluginsettings.PluginSettingsFactory
 import com.atlassian.templaterenderer.TemplateRenderer
+import com.atlassian.webresource.api.assembler.PageBuilderService
 import ru.kontur.ytissues.client.YtClient
 import ru.kontur.ytissues.client.impl.{YtClientImpl, YtClientProxy}
 import ru.kontur.ytissues.settings.{ConfluenceSettingsStorage, SettingsStorage, YtSettings}
@@ -29,7 +29,7 @@ import scala.concurrent.duration.Duration
 class SingleYtMacro(templateRenderer: TemplateRenderer,
                     i18n: I18nResolver,
                     pluginSettingsFactory: PluginSettingsFactory,
-                    webResourceManager: WebResourceManager) extends Macro {
+                    pageBuilderService: PageBuilderService) extends Macro {
   private val settingsStorage: SettingsStorage = {
     val pluginSettings = pluginSettingsFactory.createGlobalSettings
     new ConfluenceSettingsStorage(pluginSettings)
@@ -61,7 +61,8 @@ class SingleYtMacro(templateRenderer: TemplateRenderer,
 
   @throws(classOf[MacroExecutionException])
   override def execute(params: util.Map[String, String], defaultParam: String, cc: ConversionContext): String = {
-    webResourceManager.requireResource(s"${Constants.PROJECT_BASE_KEY}:cssResource")
+    requireResource(s"${Constants.PROJECT_BASE_KEY}:cssResource")
+
     val issueIdOrUrl: String = params.get(Constants.ISSUE_ID_OR_URL_KEY)
     if (issueIdOrUrl == null) throw new MacroExecutionException(
       i18n.getText(s"${Constants.PROJECT_BASE_KEY}.exceptionMessage.issueIdOrUrlNotDefined"))
@@ -93,6 +94,14 @@ class SingleYtMacro(templateRenderer: TemplateRenderer,
     catch {
       case e: Exception => throw new MacroExecutionException(e)
     }
+  }
+
+  /**
+   * Requires web resource as in {{com.atlassian.confluence.setup.velocity.VelocityFriendlyPageBuilderService}}
+   * @param resourceKey is complete resource key
+   */
+  private def requireResource(resourceKey: String): Unit = {
+    pageBuilderService.assembler().resources().requireWebResource(resourceKey)
   }
 
   @throws(classOf[Exception])

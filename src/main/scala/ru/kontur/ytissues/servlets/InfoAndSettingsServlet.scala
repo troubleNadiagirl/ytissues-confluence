@@ -90,8 +90,11 @@ class InfoAndSettingsServlet(userManager: UserManager,
   }
 
   private def isSysAdminRequest(request: HttpServletRequest): Boolean = {
-    val username: String = userManager.getRemoteUsername(request)
-    username != null && userManager.isSystemAdmin(username)
+    val userKey = Option(userManager.getRemoteUserKey(request))
+    userKey match {
+      case Some(key) => userManager.isSystemAdmin(key)
+      case None => false
+    }
   }
 
   @throws(classOf[IOException])

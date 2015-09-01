@@ -23,9 +23,9 @@ import scala.Option;
  * @author michael.plusnin
  */
 public class YtBaseGetterServlet extends HttpServlet {
-    private static Logger logger = Logger.getLogger(YtBaseGetterServlet.class);
+    private static final Logger logger = Logger.getLogger(YtBaseGetterServlet.class);
 
-    private SettingsStorage settingsStorage;
+    private final SettingsStorage settingsStorage;
 
     public YtBaseGetterServlet(PluginSettingsFactory pluginSettingsFactory) {
         this.settingsStorage = new ConfluenceSettingsStorage(
@@ -35,7 +35,7 @@ public class YtBaseGetterServlet extends HttpServlet {
 
     /**
      * Writes to response output stream JSON with
-     * { host, port, path, protocol } fields, that getted from YT server url
+     * { host, port, path, protocol } fields, that taken from YT server url
      */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
