@@ -38,7 +38,7 @@
     <p>
       Duration format applies all that applies scala.concurrent.Duration.apply method.
       Thus format of finite duration is "&lt;length&gt;&lt;unit&gt;", where whitespace is allowed before,
-      between and after the parts. Infinite duration is "Inf".
+      between and after the parts.
 
       Units for finite durations is one of: day, days, hour, hours, micro, micros, microsecond,
       microseconds, milli, millis, millisecond, milliseconds, minute, minutes, nano, nanos,
