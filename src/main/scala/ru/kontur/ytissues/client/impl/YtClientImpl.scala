@@ -21,8 +21,11 @@ class YtClientImpl(private val settings: YtClientSettings)
   private val http = CreateDispatch()
 
   private def CreateDispatch(): Http = {
+    val halfTimeoutMillis = settings.timeout.toMillis.toInt/2
+
     val config = new AsyncHttpClientConfig.Builder()
-      .setRequestTimeout(settings.timeout.toMillis.toInt)
+      .setRequestTimeout(halfTimeoutMillis)
+      .setConnectTimeout(halfTimeoutMillis)
       .build()
 
     Http(new AsyncHttpClient(config))
