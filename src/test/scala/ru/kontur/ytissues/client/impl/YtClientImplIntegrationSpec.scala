@@ -14,6 +14,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
  * @author Michael Plusnin <michael.plusnin@gmail.com>
  * @since 31.07.2015
  */
+@Ignore // TODO(mp): make not ignored. Move to integration tests
 class YtClientImplIntegrationSpec extends WordSpec with Matchers with ScalaFutures {
   implicit val defaultPatience = PatienceConfig(timeout = 1.seconds, interval = 5.millis)
 
