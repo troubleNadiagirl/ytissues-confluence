@@ -49,7 +49,8 @@
         <url-pattern>/ytissues-ytbase</url-pattern>
     </servlet>
     <xhtml-macro key="single-yt-issue-macro" name="single-yt-issue-macro"
-                 class="ru.kontur.ytissues.SingleYtMacro" i18n-name-key="ru.kontur.ytissues.single-yt-issue-macro"
+                 class="ru.kontur.ytissues.macro.SingleMacroController"
+                 i18n-name-key="ru.kontur.ytissues.single-yt-issue-macro"
                  icon="/download/resources/${project.groupId}.${project.artifactId}/images/macroLogo.png">
         <description key="ru.kontur.ytissues.single-yt-issue-macro.description" />
         <category name="development" />
