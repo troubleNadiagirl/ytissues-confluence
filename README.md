@@ -2,7 +2,7 @@
 
 # ytissues-confluence
 
-This plugin for Atlassian Confluence allows to insert YouTrack issue block into WIKI page.
+This plugin for Atlassian Confluence allows inserting YouTrack issue block into WIKI page.
 
 ## Build
-Build system for this plugin is Maven. To build you can run `mvn package` in your console.
+Build system for this plugin is Maven. To start, run `mvn package` in your console.
